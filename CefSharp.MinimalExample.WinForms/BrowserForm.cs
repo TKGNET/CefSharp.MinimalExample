@@ -26,6 +26,9 @@ namespace CefSharp.MinimalExample.WinForms
             };
             toolStripContainer.ContentPanel.Controls.Add(browser);
 
+            // add custom requestHandler
+            browser.RequestHandler = new CustomHandler.CustomRequestHandler();
+
             browser.IsBrowserInitializedChanged += OnIsBrowserInitializedChanged;
             browser.LoadingStateChanged += OnLoadingStateChanged;
             browser.ConsoleMessage += OnBrowserConsoleMessage;

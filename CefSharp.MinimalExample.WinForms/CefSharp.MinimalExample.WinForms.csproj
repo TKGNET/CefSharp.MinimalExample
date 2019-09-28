@@ -71,6 +71,9 @@
       <DependentUpon>BrowserForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ControlExtensions.cs" />
+    <Compile Include="CustomHandler\CustomRequestHandler.cs" />
+    <Compile Include="CustomHandler\CustomResourceRequestHandler.cs" />
+    <Compile Include="CustomHandler\MemoryStreamResponseFilter.cs" />
     <Compile Include="Program.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

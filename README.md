@@ -1,23 +1,14 @@
 # CefSharp.MinimalExample
 
-Minimal example of how the CefSharp library can be used using the official `Nuget` packages with .NET Framework
-projects (`CefSharp.MinimalExample.sln`) and .NET Core projects (`CefSharp.MinimalExample.netcore.sln`). 
+Demo for CefSharpIssue[#2903]: Custom ResourceHandler Unable to Load Image
 
-Includes examples for
-- WinForms
-- WPF
-- OffScreen
- 
+This demo creates custom RequestHandler / ResourceResponseHandler // MemoryStreamResponseFilter to access response payload in CefWinforms
+They are simplified versions from CefSharp master: ExampleRequestHandler / ExampleRequestResourceHandler / MemoryStreamResponseFilter
 
-For a more complete example of each project see the main `CefSharp` repository.
+Goal is to access the response payload by copying the responseStream a memoryStream and finalizing it in the LoadComplete method.
 
-## .NET Core support
-As of version `75.1.142`, the CefSharp NuGet packages can be used with .NET Core 3.0 projects (as shown by the examples). However, the current versions have some limitations that you should be aware of:
-- The target machine still needs to have .NET Framework 4.5.2 or higher installed, as the `CefSharp.BrowserSubprocess.exe` is still used.
-- The project file needs to update the references of `CefSharp.WinForms`/`CefSharp.WPF`/`CefSharp.OffScreen`, as well as `CefSharp.Core` and `CefSharp` to use `<Private>true</Private>`, as otherwise the CoreCLR would not load these libraries as they would not be specified in the `.deps.json` file.
-- When publishing a self-contained app using a runtime identifier `win-x64` or `win-x86`, you need to set the `Platform` property to `x64` or `x86`; as otherwise it would be `AnyCPU` and the check in the `.targets` file of the NuGet package would fail.<br>
-  Example:
-  - x86: `dotnet publish -f netcoreapp3.0 -r win-x86 -p:Platform=x86`
-  - x64: `dotnet publish -f netcoreapp3.0 -r win-x64 -p:Platform=x64`
+This has worked in previous versions of CefSharp, but not in this tested version 75.
 
-It is possible to publish the application as single EXE file by adding `-p:PublishSingleFile=true`.
+Reason: Currently MemoryStreamResponseFilter.Dispose is always called IMMEDIATELY before IRequestResourceHandler.LoadCompleted
+and the memoryStream is set to null.
+
